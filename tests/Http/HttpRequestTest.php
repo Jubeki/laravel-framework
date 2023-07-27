@@ -2,6 +2,7 @@
 
 namespace Illuminate\Tests\Http;
 
+use DateMalformedStringException;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Routing\Route;
@@ -732,7 +733,11 @@ class HttpRequestTest extends TestCase
 
     public function testDateMethodExceptionWhenValueInvalid()
     {
-        $this->expectException(InvalidArgumentException::class);
+        if(version_compare(PHP_VERSION, '8.3.0-dev', '>=')) {
+            $this->expectException(DateMalformedStringException::class);
+        } else {
+            $this->expectException(InvalidArgumentException::class);
+        }
 
         $request = Request::create('/', 'GET', [
             'date' => 'invalid',
@@ -743,7 +748,11 @@ class HttpRequestTest extends TestCase
 
     public function testDateMethodExceptionWhenFormatInvalid()
     {
-        $this->expectException(InvalidArgumentException::class);
+        if(version_compare(PHP_VERSION, '8.3.0-dev', '>=')) {
+            $this->expectException(DateMalformedStringException::class);
+        } else {
+            $this->expectException(InvalidArgumentException::class);
+        }
 
         $request = Request::create('/', 'GET', [
             'date' => '20-01-01 16:30:25',
